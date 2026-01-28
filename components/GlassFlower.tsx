@@ -10,11 +10,14 @@ export function GlassFlower() {
   const { nodes } = useGLTF("/Untitled1.glb") as any;
   const scroll = useScroll();
   const group = useRef<THREE.Group>(null);
-  const sphereRef = useRef<THREE.Mesh>(null);
+  const sphereRef = useRef<THREE.Mesh>(null); // Outer Glass
+  const coreRef = useRef<THREE.Mesh>(null);   // Neutron Star Core
   const petalRefs = useRef<(THREE.Mesh | null)[]>([]);
   
   const { viewport } = useThree();
   const isMobile = viewport.width < 5;
+  
+  // Position aligned with your "White Circle" design (Left side)
   const xPosition = isMobile ? 0 : -2.2; 
 
   const petalData = useMemo(() => {
@@ -22,23 +25,24 @@ export function GlassFlower() {
 
     return petalKeys.map((key) => {
       const node = nodes[key];
-      
       const originalPos = node.position.clone();
       const originalRot = node.rotation.clone();
 
-      // SCATTER LOGIC - VISIBILITY FIX
-      // Camera is at Z=6. We must ensure petals don't start behind the camera (Z > 6).
+      // Close Cloud Distance
+      const distance = 1.5 + Math.random() * 2.5;
+
+      const direction = new THREE.Vector3(
+        (Math.random() - 0.2), // Slight right bias
+        (Math.random() - 0.5) * 1.2, 
+        (Math.random() - 0.5)
+      ).normalize();
       
-      const randomX = (Math.random() - 0.5) * 25; // Wide spread horizontally
-      const randomY = (Math.random() - 0.5) * 25; // Wide spread vertically
-      const randomZ = -5 - Math.random() * 10;    // Start DEEP inside (Z: -5 to -15) so they fly forward
-      
-      const randomPos = new THREE.Vector3(randomX, randomY, randomZ);
+      const randomPos = direction.multiplyScalar(distance);
 
       const randomRot = new THREE.Euler(
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2
+        Math.random() * Math.PI, // Reduced rotation chaos slightly
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
       );
 
       return {
@@ -51,6 +55,7 @@ export function GlassFlower() {
     });
   }, [nodes]);
 
+  // Pre-position meshes to prevent "flicker" on load
   useLayoutEffect(() => {
     petalRefs.current.forEach((mesh, i) => {
       if (mesh && petalData[i]) {
@@ -61,37 +66,50 @@ export function GlassFlower() {
   }, [petalData]);
 
   useFrame((state, delta) => {
-    // TIMING FIX:
-    // 0.25 ensures it finishes strictly within the first 25% of the page
-    // (Hero + WhatWeBuilding). It will not go beyond.
-    const r1 = scroll.range(0, 0.25); 
+    const r1 = scroll.range(0, 0.25);
+    const progress = THREE.MathUtils.smootherstep(r1, 0, 1);
     
-    // Idle Animation
+    // Exit Phase
+    const r2 = scroll.range(0.35, 0.20);
+    const scrollUpOffset = r2 * 14;
+
     if (group.current) {
-        group.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+        const idleFloat = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+        group.current.position.y = idleFloat + scrollUpOffset;
         group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
     }
 
+    // Outer Glass Rotation
     if (sphereRef.current) {
       sphereRef.current.rotation.y += delta * 0.5;
       sphereRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
     }
 
-    // ANIMATION LOOP
+    // --- NEUTRON STAR ANIMATION ---
+    if (coreRef.current) {
+        // Fast spin (Neutron stars spin rapidly)
+        coreRef.current.rotation.y -= delta * 5; 
+        
+        // Pulsing Intensity (Heartbeat of the star)
+        // We access the material via type casting to animate properties
+        const material = coreRef.current.material as THREE.MeshStandardMaterial;
+        // Pulse between 4 and 8 intensity
+        material.emissiveIntensity = 6 + Math.sin(state.clock.elapsedTime * 8) * 2;
+    }
+
+    // Petal Logic
     petalRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const data = petalData[i];
 
-      const targetX = THREE.MathUtils.lerp(data.randomPos.x, data.originalPos.x, r1);
-      const targetY = THREE.MathUtils.lerp(data.randomPos.y, data.originalPos.y, r1);
-      const targetZ = THREE.MathUtils.lerp(data.randomPos.z, data.originalPos.z, r1);
+      const targetX = THREE.MathUtils.lerp(data.randomPos.x, data.originalPos.x, progress);
+      const targetY = THREE.MathUtils.lerp(data.randomPos.y, data.originalPos.y, progress);
+      const targetZ = THREE.MathUtils.lerp(data.randomPos.z, data.originalPos.z, progress);
 
-      const rotX = THREE.MathUtils.lerp(data.randomRot.x, data.originalRot.x, r1);
-      const rotY = THREE.MathUtils.lerp(data.randomRot.y, data.originalRot.y, r1);
-      const rotZ = THREE.MathUtils.lerp(data.randomRot.z, data.originalRot.z, r1);
+      const rotX = THREE.MathUtils.lerp(data.randomRot.x, data.originalRot.x, progress);
+      const rotY = THREE.MathUtils.lerp(data.randomRot.y, data.originalRot.y, progress);
+      const rotZ = THREE.MathUtils.lerp(data.randomRot.z, data.originalRot.z, progress);
 
-      // DAMPLING SPEED INCREASED (8)
-      // This makes the animation "tighter" so it doesn't lag behind the scrollbar
       mesh.position.x = MathUtils.damp(mesh.position.x, targetX, 8, delta);
       mesh.position.y = MathUtils.damp(mesh.position.y, targetY, 8, delta);
       mesh.position.z = MathUtils.damp(mesh.position.z, targetZ, 8, delta);
@@ -103,11 +121,12 @@ export function GlassFlower() {
   });
 
   return (
+    // Note: yPosition is handled in useFrame now, so we pass 0 here
     <group ref={group} dispose={null} scale={[0.8, 0.8, 0.8]} position={[xPosition, 0, 0]}>
       {petalData.map((p, i) => (
         <mesh 
           key={i} 
-          ref={(el) => { petalRefs.current[i] = el; }}
+          ref={(el) => { petalRefs.current[i] = el; }} 
           geometry={p.geometry}
         >
            <meshPhysicalMaterial 
@@ -145,13 +164,18 @@ export function GlassFlower() {
         </mesh>
       )}
 
+      {/* NEUTRON STAR CORE */}
       {nodes.Sphere001 && (
-        <mesh geometry={nodes.Sphere001.geometry}>
+        <mesh 
+            ref={coreRef} // Attached Ref
+            geometry={nodes.Sphere001.geometry}
+        >
           <meshStandardMaterial
             toneMapped={false}
-            emissive="#48cae4"
-            color="#000"
-            emissiveIntensity={3}
+            // "Neutron Star" Color: Very bright, slightly blue-white
+            emissive="#cceeff" 
+            color="#ffffff"
+            emissiveIntensity={6} // High intensity for bloom/glow feel
           />
         </mesh>
       )}
