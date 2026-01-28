@@ -24,13 +24,23 @@ export default function Hero() {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d1f3c] to-[#081421]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(72,202,228,0.1)_0%,_transparent_50%)]" />
-        <div className="absolute inset-y-0 left-0 w-[70%] z-0 bg-[#0a1628]">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div
-            ref={eventsRef}
-            className="absolute inset-0 z-10 bg-transparent select-none touch-none cursor-grab active:cursor-grabbing"
-          />
-          <div className="absolute inset-0 z-0">
-            <GlassFlowerHeroScene eventSource={eventSource} />
+            className="absolute left-6 top-1/2 -translate-y-1/2 w-[640px] h-[640px] pointer-events-none rounded-full overflow-hidden"
+            style={{
+              WebkitMaskImage:
+                "radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 75%)",
+              maskImage:
+                "radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 75%)"
+            }}
+          >
+            <div
+              ref={eventsRef}
+              className="absolute inset-0 z-10 bg-transparent pointer-events-auto select-none touch-none cursor-grab active:cursor-grabbing"
+            />
+            <div className="absolute inset-0 z-0">
+              <GlassFlowerHeroScene eventSource={eventSource} />
+            </div>
           </div>
         </div>
       </div>

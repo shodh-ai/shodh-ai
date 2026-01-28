@@ -21,7 +21,7 @@ function GlassFlowerModel() {
   }, [nodes]);
 
   return (
-    <group ref={group} position={[-1.2, -0.2, 0]}>
+    <group ref={group} position={[0, -0.2, 0]}>
       <group>
         {petalNodes.map((node: any, i: number) => (
           <mesh
@@ -32,30 +32,33 @@ function GlassFlowerModel() {
             scale={node.scale}
           >
             <meshPhysicalMaterial
-              transmission={1}
-              thickness={0.5}
-              roughness={0}
-              ior={1.4}
-              metalness={0}
-              envMapIntensity={2}
+              color="#050508"
+              metalness={1}
+              roughness={0.05}
+              envMapIntensity={1.5}
               clearcoat={1}
               clearcoatRoughness={0}
+              reflectivity={1}
             />
           </mesh>
         ))}
       </group>
 
+      {/* Outer sphere disabled - was causing WebGL crashes and white blowout
       {nodes?.Sphere?.geometry && (
         <mesh geometry={nodes.Sphere.geometry}>
           <meshPhysicalMaterial
-            transmission={1}
-            thickness={-1}
-            roughness={0}
+            transmission={0.8}
+            thickness={0.5}
+            roughness={0.1}
             ior={1.4}
-            envMapIntensity={1.5}
+            envMapIntensity={0.5}
+            transparent
+            opacity={0.3}
           />
         </mesh>
       )}
+      */}
 
       {nodes?.Sphere001?.geometry && (
         <mesh geometry={nodes.Sphere001.geometry}>
@@ -80,11 +83,11 @@ export default function GlassFlowerHeroScene({
 }: GlassFlowerHeroSceneProps) {
   return (
     <Canvas
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: true, alpha: false }}
       camera={{ position: [0, 2.2, 5.2], fov: 35 }}
       onCreated={({ gl }) => {
-        gl.setClearColor(0x0a1628, 0)
-        gl.domElement.style.background = "transparent"
+        gl.setClearColor(0x0a1628, 1)
+        gl.domElement.style.background = "#0a1628"
       }}
       eventSource={eventSource ?? undefined}
       eventPrefix="client"
@@ -101,10 +104,7 @@ export default function GlassFlowerHeroScene({
         enablePan={false}
         enableZoom={false}
       />
-      <Environment
-        files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/blue_photo_studio_1k.hdr"
-        resolution={256}
-      />
+      <Environment preset="night" />
     </Canvas>
   );
 }

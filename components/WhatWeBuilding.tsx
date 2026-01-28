@@ -58,9 +58,8 @@ export default function WhatWeBuilding() {
             {/* Text Content */}
             <div className="flex-1 max-w-4xl ml-auto">
               <p
-                className={`text-4xl md:text-5xl leading-tight ${
-                  section.dimmed ? "text-white/50" : "text-white"
-                }`}
+                className={`text-4xl md:text-5xl leading-tight ${section.dimmed ? "text-white/50" : "text-white"
+                  }`}
               >
                 {section.text}
                 {section.highlight && (
