@@ -1,13 +1,38 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
+import type { GlassFlowerHeroSceneProps } from "@/components/GlassFlowerHeroScene";
+
+const GlassFlowerHeroScene = dynamic<GlassFlowerHeroSceneProps>(
+  () =>
+    import("@/components/GlassFlowerHeroScene").then((m) => m.default),
+  { ssr: false }
+)
 
 export default function Hero() {
+  const eventsRef = useRef<HTMLDivElement | null>(null);
+  const [eventSource, setEventSource] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setEventSource(eventsRef.current);
+  }, []);
+
   return (
     <section className="relative min-h-screen w-full overflow-hidden">
-      {/* Background with gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d1f3c] to-[#081421]">
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d1f3c] to-[#081421]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(72,202,228,0.1)_0%,_transparent_50%)]" />
+        <div className="absolute inset-y-0 left-0 w-[70%] z-0 bg-[#0a1628]">
+          <div
+            ref={eventsRef}
+            className="absolute inset-0 z-10 bg-transparent select-none touch-none cursor-grab active:cursor-grabbing"
+          />
+          <div className="absolute inset-0 z-0">
+            <GlassFlowerHeroScene eventSource={eventSource} />
+          </div>
+        </div>
       </div>
 
       {/* Content */}
