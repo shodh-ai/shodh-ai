@@ -11,7 +11,7 @@ export function GlassFlower() {
   const scroll = useScroll();
   const group = useRef<THREE.Group>(null);
   const sphereRef = useRef<THREE.Mesh>(null); // Outer Glass
-  const coreRef = useRef<THREE.Mesh>(null);   // Neutron Star Core
+  const coreRef = useRef<THREE.Mesh>(null);   // Inner Metal Core
   const petalRefs = useRef<(THREE.Mesh | null)[]>([]);
   
   const { viewport } = useThree();
@@ -85,16 +85,10 @@ export function GlassFlower() {
       sphereRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
     }
 
-    // --- NEUTRON STAR ANIMATION ---
+    // Core Rotation (Slow and heavy like metal)
     if (coreRef.current) {
-        // Fast spin (Neutron stars spin rapidly)
-        coreRef.current.rotation.y -= delta * 5; 
-        
-        // Pulsing Intensity (Heartbeat of the star)
-        // We access the material via type casting to animate properties
-        const material = coreRef.current.material as THREE.MeshStandardMaterial;
-        // Pulse between 4 and 8 intensity
-        material.emissiveIntensity = 6 + Math.sin(state.clock.elapsedTime * 8) * 2;
+        coreRef.current.rotation.y += delta * 0.5; 
+        coreRef.current.rotation.z += delta * 0.2;
     }
 
     // Petal Logic
@@ -140,6 +134,7 @@ export function GlassFlower() {
         </mesh>
       ))}
 
+      {/* Outer Glass Shell */}
       {nodes.Sphere && (
         <mesh 
             ref={sphereRef}
@@ -164,18 +159,24 @@ export function GlassFlower() {
         </mesh>
       )}
 
-      {/* NEUTRON STAR CORE */}
+      {/* INNER CORE: Now Metallic to match the petals */}
       {nodes.Sphere001 && (
         <mesh 
-            ref={coreRef} // Attached Ref
+            ref={coreRef} 
             geometry={nodes.Sphere001.geometry}
+            scale={[1, 1, 1]}
         >
-          <meshStandardMaterial
-            toneMapped={false}
-            // "Neutron Star" Color: Very bright, slightly blue-white
-            emissive="#cceeff" 
-            color="#ffffff"
-            emissiveIntensity={6} // High intensity for bloom/glow feel
+          <meshPhysicalMaterial
+            color="#48cae4" // Shodh AI Cyan/Blue
+            emissive="#001a24" // Very slight self-illumination so it doesn't look dead in shadows
+            emissiveIntensity={0.5}
+            metalness={1}    // Pure metal
+            roughness={0.1}  // Polished chrome look
+            clearcoat={1}    // Car-paint like coating
+            clearcoatRoughness={0.1}
+            reflectivity={1}
+            iridescence={0.5} 
+            iridescenceIOR={1.3}
           />
         </mesh>
       )}

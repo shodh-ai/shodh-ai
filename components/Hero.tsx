@@ -13,9 +13,9 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen items-center">
+      <div className="relative z-10 flex min-h-screen items-end">
         {/* Left Column - Description */}
-        <div className="flex flex-col justify-end pb-32 pl-10 w-1/2 h-full pt-40">
+        <div className="flex flex-col justify-end pb-28 pl-10 w-1/2 h-full">
           <p className="text-white text-xl leading-relaxed max-w-md mb-9">
             Shodh AI is building India&apos;s sovereign engine to design &amp;
             discover next generation of Energy Materials.
@@ -39,8 +39,8 @@ export default function Hero() {
         </div>
 
         {/* Right Column - Title */}
-        <div className="flex flex-col justify-end pb-24 pr-10 w-1/2 h-full pt-40 pointer-events-none">
-          <h1 className="text-[#f0f0ff] text-6xl md:text-7xl lg:text-8xl xl:text-[124px] font-medium leading-none text-right uppercase opacity-90">
+        <div className="flex flex-col justify-end pb-28 pr-10 w-1/2 h-full pointer-events-none">
+          <h1 className="text-[#f0f0ff] text-6xl md:text-7xl lg:text-8xl xl:text-[124px] font-medium leading-[0.85] text-right uppercase opacity-90">
             Generative
             <br />
             AI for THE
