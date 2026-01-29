@@ -42,7 +42,9 @@ export default function Home() {
         <Environment preset="city" />
 
         <Suspense fallback={null}>
-          <ScrollControls pages={6} damping={0.2}>
+          {/* FIX: Increased pages from 6 to 8 to accommodate the tall 300vh section */}
+          <ScrollControls pages={8.15} damping={0.2}>
+            
             {/* The 3D Scene */}
             <GlassFlower />
 

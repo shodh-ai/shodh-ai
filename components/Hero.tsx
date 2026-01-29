@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+// Import the new component
+import HeroTitle from "./HeroTitle";
 
 export default function Hero() {
   return (
@@ -12,43 +14,42 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(72,202,228,0.15)_0%,_transparent_50%)]" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex min-h-screen items-end">
-        {/* Left Column - Description */}
-        <div className="flex flex-col justify-end pb-28 pl-10 w-1/2 h-full">
-          <p className="text-white text-xl leading-relaxed max-w-md mb-9">
-            Shodh AI is building India&apos;s sovereign engine to design &amp;
-            discover next generation of Energy Materials.
-          </p>
+      {/* Content Container - Vertically Centered */}
+      <div className="relative z-10 flex min-h-screen w-full flex-col justify-center">
+        
+        {/* Row - Aligns Left and Right columns at the bottom */}
+        <div className="flex w-full items-end px-10">
+          
+          {/* Left Column */}
+          <div className="flex w-1/2 flex-col pb-4">
+            <p className="text-white text-xl leading-relaxed max-w-md mb-9">
+              Shodh AI is building India&apos;s sovereign engine to design &amp;
+              discover next generation of Energy Materials.
+            </p>
 
-          {/* CTA Buttons */}
-          <div className="flex gap-5">
-            <Link
-              href="#mission"
-              className="inline-flex items-center justify-center px-5 py-3 bg-[#f0f0ff] text-[#081421] text-base tracking-wide rounded-md hover:bg-white transition-colors"
-            >
-              OUR MISSION
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="inline-flex items-center justify-center px-5 py-3 bg-transparent text-white text-base tracking-wide border border-white/50 rounded-md hover:bg-white/10 transition-colors"
-            >
-              See How It Works
-            </Link>
+            {/* CTA Buttons */}
+            <div className="flex gap-5">
+              <Link
+                href="#mission"
+                className="inline-flex items-center justify-center px-5 py-3 bg-[#f0f0ff] text-[#081421] text-base tracking-wide rounded-md hover:bg-white transition-colors"
+              >
+                OUR MISSION
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="inline-flex items-center justify-center px-5 py-3 bg-transparent text-white text-base tracking-wide border border-white/50 rounded-md hover:bg-white/10 transition-colors"
+              >
+                See How It Works
+              </Link>
+            </div>
           </div>
-        </div>
 
-        {/* Right Column - Title */}
-        <div className="flex flex-col justify-end pb-28 pr-10 w-1/2 h-full pointer-events-none">
-          <h1 className="text-[#f0f0ff] text-6xl md:text-7xl lg:text-8xl xl:text-[124px] font-medium leading-[0.85] text-right uppercase opacity-90">
-            Generative
-            <br />
-            AI for THE
-            <br />
-            Physical
-            <br />
-            World
-          </h1>
+          {/* Right Column */}
+          <div className="flex w-1/2 flex-col items-end pointer-events-none pb-4">
+            {/* Replaced Static H1 with Scroll-Animated Title */}
+            <HeroTitle />
+          </div>
+
         </div>
       </div>
     </section>

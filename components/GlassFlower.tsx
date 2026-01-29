@@ -18,7 +18,7 @@ export function GlassFlower() {
   const isMobile = viewport.width < 5;
   
   // Position aligned with your "White Circle" design (Left side)
-  const xPosition = isMobile ? 0 : -2.2; 
+  const xPosition = isMobile ? 0 : -2.3; 
 
   const petalData = useMemo(() => {
     const petalKeys = Object.keys(nodes).filter((key) => key.toLowerCase().includes("petal"));
@@ -66,17 +66,38 @@ export function GlassFlower() {
   }, [petalData]);
 
   useFrame((state, delta) => {
-    const r1 = scroll.range(0, 0.25);
+    // 1. ASSEMBLY PHASE (0% to 20%)
+    const r1 = scroll.range(0, 0.20);
     const progress = THREE.MathUtils.smootherstep(r1, 0, 1);
+
+    // 2. EXIT PHASE (Starts at 63%)
+    // The section physically unpins around 66%. 
+    // Starting slightly earlier (0.63) ensures seamless movement.
+    const r2 = scroll.range(0.45, 0.15);
     
-    // Exit Phase
-    const r2 = scroll.range(0.35, 0.20);
-    const scrollUpOffset = r2 * 14;
+    // FIX: Reduced from 20 to 5.5
+    // This roughly matches the viewport height (approx 4 units) + buffer.
+    // It prevents the flower from shooting up too high.
+    const scrollUpOffset = r2 * 5.5;
 
     if (group.current) {
         const idleFloat = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-        group.current.position.y = idleFloat + scrollUpOffset;
+
+        // --- NEW LOGIC HERE ---
+        // As the flower assembles (progress 0->1), we move it DOWN (-0.6).
+        // At progress=0 (Hero), shift is 0 (Centered).
+        // At progress=1 (What We Building), shift is -0.6 (Below White Line).
+        const assemblyYDrop = THREE.MathUtils.lerp(0, -0.6, progress);
+
+        // Combine: Idle + Scroll Exit + Assembly Drop
+        group.current.position.y = idleFloat + scrollUpOffset + assemblyYDrop;
+        
         group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
+
+        // Scale Animation (0.76 -> 1.14)
+        // Reduced by 5% (0.8 -> 0.76 and 1.2 -> 1.14)
+        const currentScale = THREE.MathUtils.lerp(0.76, 1.14, progress);
+        group.current.scale.set(currentScale, currentScale, currentScale);
     }
 
     // Outer Glass Rotation
@@ -116,7 +137,8 @@ export function GlassFlower() {
 
   return (
     // Note: yPosition is handled in useFrame now, so we pass 0 here
-    <group ref={group} dispose={null} scale={[0.8, 0.8, 0.8]} position={[xPosition, 0, 0]}>
+    // Updated initial scale to match the 5% reduction
+    <group ref={group} dispose={null} scale={[0.76, 0.76, 0.76]} position={[xPosition, 0, 0]}>
       {petalData.map((p, i) => (
         <mesh 
           key={i} 
@@ -139,7 +161,7 @@ export function GlassFlower() {
         <mesh 
             ref={sphereRef}
             geometry={nodes.Sphere.geometry} 
-            scale={[1.1, 1.1, 1.1]}
+            scale={[1, 1, 1]}
         >
           <MeshTransmissionMaterial
             backside
