@@ -10,7 +10,7 @@ export default function Hero() {
       {/* Background gradients - Keep these for mood, but ensure they are semi-transparent */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Removed the BG color so the canvas shows through */}
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#0d1f3c]/50 to-[#081421]/80" />
+        <div className="absolute inset-0 bg-none" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(72,202,228,0.15)_0%,_transparent_50%)]" />
       </div>
 

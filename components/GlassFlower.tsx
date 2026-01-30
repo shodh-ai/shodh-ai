@@ -17,8 +17,8 @@ export function GlassFlower() {
   const { viewport } = useThree();
   const isMobile = viewport.width < 5;
   
-  // Position aligned with your "White Circle" design (Left side)
-  const xPosition = isMobile ? 0 : -2.3; 
+  // Initial Position: Left for Hero
+  const startX = isMobile ? 0 : -2.3; 
 
   const petalData = useMemo(() => {
     const petalKeys = Object.keys(nodes).filter((key) => key.toLowerCase().includes("petal"));
@@ -66,37 +66,33 @@ export function GlassFlower() {
   }, [petalData]);
 
   useFrame((state, delta) => {
-    // 1. ASSEMBLY PHASE (0% to 20%)
-    const r1 = scroll.range(0, 0.20);
+    // 1. ASSEMBLY PHASE (Synced with new 450vh height)
+    // Range extended to 0.65 to cover the longer scroll distance.
+    const r1 = scroll.range(0, 0.65);
     const progress = THREE.MathUtils.smootherstep(r1, 0, 1);
 
-    // 2. EXIT PHASE (Starts at 63%)
-    // The section physically unpins around 66%. 
-    // Starting slightly earlier (0.63) ensures seamless movement.
-    const r2 = scroll.range(0.45, 0.15);
-    
-    // FIX: Reduced from 20 to 5.5
-    // This roughly matches the viewport height (approx 4 units) + buffer.
-    // It prevents the flower from shooting up too high.
-    const scrollUpOffset = r2 * 5.5;
+    // 2. EXIT PHASE (Late Departure)
+    // Starts at 0.70 (Near the very end of the text section)
+    // This ensures the flower stays centered while you read the 3rd paragraph.
+    const r2 = scroll.range(0.70, 0.20);
+    const scrollUpOffset = r2 * 7.5;
 
     if (group.current) {
         const idleFloat = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
 
-        // --- NEW LOGIC HERE ---
-        // As the flower assembles (progress 0->1), we move it DOWN (-0.6).
-        // At progress=0 (Hero), shift is 0 (Centered).
-        // At progress=1 (What We Building), shift is -0.6 (Below White Line).
+        // Y POSITION LOGIC
         const assemblyYDrop = THREE.MathUtils.lerp(0, -0.6, progress);
-
-        // Combine: Idle + Scroll Exit + Assembly Drop
         group.current.position.y = idleFloat + scrollUpOffset + assemblyYDrop;
+
+        // X POSITION: Drifts slowly to center as you read
+        const targetX = isMobile ? 0 : THREE.MathUtils.lerp(startX, 0, progress);
+        group.current.position.x = targetX;
         
         group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
 
         // Scale Animation (0.76 -> 1.14)
         // Reduced by 5% (0.8 -> 0.76 and 1.2 -> 1.14)
-        const currentScale = THREE.MathUtils.lerp(0.76, 1.14, progress);
+        const currentScale = THREE.MathUtils.lerp(0.76, 1.0, progress);
         group.current.scale.set(currentScale, currentScale, currentScale);
     }
 
@@ -125,20 +121,21 @@ export function GlassFlower() {
       const rotY = THREE.MathUtils.lerp(data.randomRot.y, data.originalRot.y, progress);
       const rotZ = THREE.MathUtils.lerp(data.randomRot.z, data.originalRot.z, progress);
 
-      mesh.position.x = MathUtils.damp(mesh.position.x, targetX, 8, delta);
-      mesh.position.y = MathUtils.damp(mesh.position.y, targetY, 8, delta);
-      mesh.position.z = MathUtils.damp(mesh.position.z, targetZ, 8, delta);
+      // Increased damping slightly for smoother slow-motion feel
+      mesh.position.x = MathUtils.damp(mesh.position.x, targetX, 6, delta);
+      mesh.position.y = MathUtils.damp(mesh.position.y, targetY, 6, delta);
+      mesh.position.z = MathUtils.damp(mesh.position.z, targetZ, 6, delta);
 
-      mesh.rotation.x = MathUtils.damp(mesh.rotation.x, rotX, 8, delta);
-      mesh.rotation.y = MathUtils.damp(mesh.rotation.y, rotY, 8, delta);
-      mesh.rotation.z = MathUtils.damp(mesh.rotation.z, rotZ, 8, delta);
+      mesh.rotation.x = MathUtils.damp(mesh.rotation.x, rotX, 6, delta);
+      mesh.rotation.y = MathUtils.damp(mesh.rotation.y, rotY, 6, delta);
+      mesh.rotation.z = MathUtils.damp(mesh.rotation.z, rotZ, 6, delta);
     });
   });
 
   return (
     // Note: yPosition is handled in useFrame now, so we pass 0 here
     // Updated initial scale to match the 5% reduction
-    <group ref={group} dispose={null} scale={[0.76, 0.76, 0.76]} position={[xPosition, 0, 0]}>
+    <group ref={group} dispose={null} scale={[0.76, 0.76, 0.76]} position={[startX, 0, 0]}>
       {petalData.map((p, i) => (
         <mesh 
           key={i} 

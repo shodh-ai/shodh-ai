@@ -5,10 +5,9 @@ import { useFrame } from "@react-three/fiber";
 import { useRef, useMemo } from "react";
 
 const LINES = [
-  "Generative",
-  "AI for THE",
-  "Physical",
-  "World"
+  "BUILDING",
+  "THE TYPE 1",
+  "CIVILIZATION",
 ];
 
 export default function HeroTitle() {
