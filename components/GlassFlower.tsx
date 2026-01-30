@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useMemo, useLayoutEffect } from "react";
-import { useGLTF, MeshTransmissionMaterial, useScroll } from "@react-three/drei";
+import { useGLTF, MeshTransmissionMaterial, useScroll, MeshDistortMaterial } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { MathUtils } from "three";
@@ -10,15 +10,14 @@ export function GlassFlower() {
   const { nodes } = useGLTF("/Untitled1.glb") as any;
   const scroll = useScroll();
   const group = useRef<THREE.Group>(null);
-  const sphereRef = useRef<THREE.Mesh>(null); // Outer Glass
-  const coreRef = useRef<THREE.Mesh>(null);   // Inner Metal Core
+  const sphereRef = useRef<THREE.Mesh>(null);
   const petalRefs = useRef<(THREE.Mesh | null)[]>([]);
   
   const { viewport } = useThree();
   const isMobile = viewport.width < 5;
   
-  // Position aligned with your "White Circle" design (Left side)
-  const xPosition = isMobile ? 0 : -2.3; 
+  const startX = isMobile ? 0 : -2.5; 
+  const endX = 0; // STRICT CENTER 
 
   const petalData = useMemo(() => {
     const petalKeys = Object.keys(nodes).filter((key) => key.toLowerCase().includes("petal"));
@@ -28,22 +27,18 @@ export function GlassFlower() {
       const originalPos = node.position.clone();
       const originalRot = node.rotation.clone();
 
-      // Close Cloud Distance
-      const distance = 1.5 + Math.random() * 2.5;
+      // Distance: How scattered they are initially
+      const distance = 3.5 + Math.random() * 4.0;
 
       const direction = new THREE.Vector3(
-        (Math.random() - 0.2), // Slight right bias
-        (Math.random() - 0.5) * 1.2, 
+        (Math.random() - 0.5), 
+        (Math.random() - 0.5) * 1.5, 
         (Math.random() - 0.5)
       ).normalize();
       
       const randomPos = direction.multiplyScalar(distance);
 
-      const randomRot = new THREE.Euler(
-        Math.random() * Math.PI, // Reduced rotation chaos slightly
-        Math.random() * Math.PI,
-        Math.random() * Math.PI
-      );
+      const randomRot = new THREE.Euler(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
 
       return {
         geometry: node.geometry,
@@ -66,65 +61,53 @@ export function GlassFlower() {
   }, [petalData]);
 
   useFrame((state, delta) => {
-    // 1. ASSEMBLY PHASE (0% to 20%)
-    const r1 = scroll.range(0, 0.20);
-    const progress = THREE.MathUtils.smootherstep(r1, 0, 1);
-
-    // 2. EXIT PHASE (Starts at 63%)
-    // The section physically unpins around 66%. 
-    // Starting slightly earlier (0.63) ensures seamless movement.
-    const r2 = scroll.range(0.45, 0.15);
+    // 1. MOVEMENT (Fast entry)
+    const r_move = scroll.range(0, 0.15);
+    const moveProgress = THREE.MathUtils.smoothstep(r_move, 0, 1);
     
-    // FIX: Reduced from 20 to 5.5
-    // This roughly matches the viewport height (approx 4 units) + buffer.
-    // It prevents the flower from shooting up too high.
-    const scrollUpOffset = r2 * 5.5;
+    // 2. ASSEMBLY (SYNCED WITH TEXT)
+    // Range matches WhatWeBuilding: 0.15 to 0.65
+    // The flower will be fully assembled exactly when Slide 3 is fully visible.
+    const r_assemble = scroll.range(0.15, 0.65);
+    const assembleProgress = THREE.MathUtils.smootherstep(r_assemble, 0, 1);
+
+    // 3. EXIT (Only after everything is done)
+    // Starts at 0.80 (0.15 + 0.65)
+    const r_exit = scroll.range(0.80, 0.15);
+    const scrollUpOffset = r_exit * 25;
 
     if (group.current) {
-        const idleFloat = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-
-        // --- NEW LOGIC HERE ---
-        // As the flower assembles (progress 0->1), we move it DOWN (-0.6).
-        // At progress=0 (Hero), shift is 0 (Centered).
-        // At progress=1 (What We Building), shift is -0.6 (Below White Line).
-        const assemblyYDrop = THREE.MathUtils.lerp(0, -0.6, progress);
-
-        // Combine: Idle + Scroll Exit + Assembly Drop
-        group.current.position.y = idleFloat + scrollUpOffset + assemblyYDrop;
+        const currentX = THREE.MathUtils.lerp(startX, endX, moveProgress);
+        const breath = 1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.02;
+        group.current.scale.set(0.8 * breath, 0.8 * breath, 0.8 * breath);
+        group.current.position.x = currentX;
         
-        group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
-
-        // Scale Animation (0.76 -> 1.14)
-        // Reduced by 5% (0.8 -> 0.76 and 1.2 -> 1.14)
-        const currentScale = THREE.MathUtils.lerp(0.76, 1.14, progress);
-        group.current.scale.set(currentScale, currentScale, currentScale);
+        // Stays at Y=0 while text is visible. Only moves up on Exit.
+        const idleFloat = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+        group.current.position.y = idleFloat + scrollUpOffset;
+        
+        group.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
     }
 
-    // Outer Glass Rotation
     if (sphereRef.current) {
       sphereRef.current.rotation.y += delta * 0.5;
       sphereRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
     }
 
-    // Core Rotation (Slow and heavy like metal)
-    if (coreRef.current) {
-        coreRef.current.rotation.y += delta * 0.5; 
-        coreRef.current.rotation.z += delta * 0.2;
-    }
-
-    // Petal Logic
     petalRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const data = petalData[i];
 
-      const targetX = THREE.MathUtils.lerp(data.randomPos.x, data.originalPos.x, progress);
-      const targetY = THREE.MathUtils.lerp(data.randomPos.y, data.originalPos.y, progress);
-      const targetZ = THREE.MathUtils.lerp(data.randomPos.z, data.originalPos.z, progress);
+      const targetX = THREE.MathUtils.lerp(data.randomPos.x, data.originalPos.x, assembleProgress);
+      const targetY = THREE.MathUtils.lerp(data.randomPos.y, data.originalPos.y, assembleProgress);
+      const targetZ = THREE.MathUtils.lerp(data.randomPos.z, data.originalPos.z, assembleProgress);
 
-      const rotX = THREE.MathUtils.lerp(data.randomRot.x, data.originalRot.x, progress);
-      const rotY = THREE.MathUtils.lerp(data.randomRot.y, data.originalRot.y, progress);
-      const rotZ = THREE.MathUtils.lerp(data.randomRot.z, data.originalRot.z, progress);
+      const rotX = THREE.MathUtils.lerp(data.randomRot.x, data.originalRot.x, assembleProgress);
+      const rotY = THREE.MathUtils.lerp(data.randomRot.y, data.originalRot.y, assembleProgress);
+      const rotZ = THREE.MathUtils.lerp(data.randomRot.z, data.originalRot.z, assembleProgress);
 
+      // TIGHTER DAMPING (Increased from 3 to 8)
+      // This forces the flower to stick closely to the text timing without lagging behind.
       mesh.position.x = MathUtils.damp(mesh.position.x, targetX, 8, delta);
       mesh.position.y = MathUtils.damp(mesh.position.y, targetY, 8, delta);
       mesh.position.z = MathUtils.damp(mesh.position.z, targetZ, 8, delta);
@@ -136,9 +119,8 @@ export function GlassFlower() {
   });
 
   return (
-    // Note: yPosition is handled in useFrame now, so we pass 0 here
-    // Updated initial scale to match the 5% reduction
-    <group ref={group} dispose={null} scale={[0.76, 0.76, 0.76]} position={[xPosition, 0, 0]}>
+    // Note: Initial position is handled via ref in useFrame
+    <group ref={group} dispose={null} scale={[0.8, 0.8, 0.8]}>
       {petalData.map((p, i) => (
         <mesh 
           key={i} 
@@ -161,7 +143,7 @@ export function GlassFlower() {
         <mesh 
             ref={sphereRef}
             geometry={nodes.Sphere.geometry} 
-            scale={[1, 1, 1]}
+            scale={[1.1, 1.1, 1.1]}
         >
           <MeshTransmissionMaterial
             backside
@@ -181,24 +163,18 @@ export function GlassFlower() {
         </mesh>
       )}
 
-      {/* INNER CORE: Now Metallic to match the petals */}
+      {/* Cosmic Ball */}
       {nodes.Sphere001 && (
-        <mesh 
-            ref={coreRef} 
-            geometry={nodes.Sphere001.geometry}
-            scale={[1, 1, 1]}
-        >
-          <meshPhysicalMaterial
-            color="#48cae4" // Shodh AI Cyan/Blue
-            emissive="#001a24" // Very slight self-illumination so it doesn't look dead in shadows
-            emissiveIntensity={0.5}
-            metalness={1}    // Pure metal
-            roughness={0.1}  // Polished chrome look
-            clearcoat={1}    // Car-paint like coating
-            clearcoatRoughness={0.1}
-            reflectivity={1}
-            iridescence={0.5} 
-            iridescenceIOR={1.3}
+        <mesh geometry={nodes.Sphere001.geometry}>
+          <pointLight intensity={30} distance={15} color="#48cae4" decay={1} />
+          <MeshDistortMaterial
+            speed={3}
+            distort={0.6}
+            color="#a2d2ff"
+            emissive="#48cae4"
+            emissiveIntensity={5}
+            toneMapped={false}
+            roughness={0.2}
           />
         </mesh>
       )}

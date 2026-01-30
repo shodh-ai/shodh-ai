@@ -1,212 +1,160 @@
 "use client";
 
+import { useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useState, useRef, useMemo } from "react";
-import * as THREE from "three"; // Import Three for math utils
+import { useRef } from "react";
 
 const sections = [
   {
     number: "01",
     total: "03",
-    text: "We are building SkandaX - the world's largest AI model for Mesoscale Physics, designed to understand how matter behaves beyond ideal lab conditions.",
+    text: "We are building SkandaX - the world's largest AI model for Mesoscale Physics.",
+    highlight: "Designed to understand how matter behaves beyond ideal lab conditions.",
   },
   {
     number: "02",
     total: "03",
-    text: "Unlike conventional AI trained on text or images, SkandaX is trained on physics and degradation, learning from how materials evolve under real-world stress.",
+    text: "Unlike conventional AI trained on text or images, SkandaX is ",
+    highlight:
+      "trained on physics and degradation, learning from how materials evolve under real-world stress.",
   },
   {
     number: "03",
     total: "03",
-    text: "It understands how materials stretch, crack, and age over time - and instead of just designing new materials, it predicts how long they will last.",
+    text: "It understands how materials stretch, crack, and age over time.",
+    highlight: "Instead of just designing new materials, it predicts how long they will last.",
   },
 ];
 
 export default function WhatWeBuilding() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  
-  const outerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const progressBarRef = useRef<HTMLDivElement>(null);
-  const textRefs = useRef<HTMLSpanElement[][]>([[], [], []]);
-  
-  // NEW: Store the smoothed progress value (0 to 1)
-  const smoothedProgress = useRef(0);
+  const scroll = useScroll();
+  const slide1 = useRef<HTMLDivElement>(null);
+  const slide2 = useRef<HTMLDivElement>(null);
+  const slide3 = useRef<HTMLDivElement>(null);
 
-  const splitSections = useMemo(() => {
-    return sections.map(s => ({
-      ...s,
-      chars: s.text.split("")
-    }));
-  }, []);
+  useFrame(() => {
+    // UNIFIED TIMELINE: 0.15 to 0.80
+    // This gives plenty of time for everything to happen together.
+    const progress = scroll.range(0.15, 0.65); 
 
-  useFrame((state, delta) => {
-    if (!outerRef.current || !innerRef.current) return;
+    if (slide1.current && slide2.current && slide3.current) {
+      
+      // -- LOGIC --
+      // Slide 1: Visible 0.00 - 0.30
+      // Slide 2: Visible 0.30 - 0.60
+      // Slide 3: Visible 0.60 - 1.00 (HOLDS until end)
 
-    const rect = outerRef.current.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const scrollableDistance = rect.height - viewportHeight;
-    
-    // 1. PINNING (Instant - needs to lock to viewport tightly)
-    if (rect.top > 0) {
-      innerRef.current.style.transform = `translateY(0px)`;
-      innerRef.current.style.opacity = "1";
-    } else if (rect.bottom < viewportHeight) {
-      const endPosition = rect.height - viewportHeight;
-      innerRef.current.style.transform = `translateY(${endPosition}px)`;
-      innerRef.current.style.opacity = "1";
-    } else {
-      innerRef.current.style.transform = `translateY(${-rect.top}px)`;
-      innerRef.current.style.opacity = "1";
+      // Slide 1 (Fade Out)
+      // Ends at 0.3
+      const op1 = 1 - (progress * 3.33); 
 
-      // 2. SMOOTHING LOGIC
-      // Calculate raw target (0 to 1)
-      const rawProgress = Math.abs(rect.top) / scrollableDistance;
-      const targetProgress = Math.max(0, Math.min(1, rawProgress));
-
-      // DAMPING: This creates the "Sophisticated" delay. 
-      // A value of 2 or 3 is slow/luxurious. 10 is snappy.
-      smoothedProgress.current = THREE.MathUtils.damp(
-        smoothedProgress.current, 
-        targetProgress, 
-        2.5, // Damping factor (Lower = Smoother/Slower)
-        delta
-      );
-
-      const smoothP = smoothedProgress.current;
-
-      // 3. UPDATE PROGRESS BAR (With Smooth Value)
-      if (progressBarRef.current) {
-        progressBarRef.current.style.width = `${smoothP * 100}%`;
+      // Slide 2 (Bell Curve)
+      // Peak at 0.45
+      let op2 = 0;
+      if (progress > 0.25 && progress < 0.65) {
+        op2 = Math.sin((progress - 0.25) / 0.4 * Math.PI); 
       }
 
-      // 4. DETERMINE ACTIVE PARAGRAPH
-      let currentIndex = 0;
-      let localProgress = 0;
+      // Slide 3 (Fade In & HOLD)
+      // Starts at 0.55, reaches full opacity by 0.75, stays full till 1.0
+      let op3 = (progress - 0.55) * 4;
+      
+      // Apply Styles
+      slide1.current.style.opacity = Math.max(0, op1).toString();
+      slide1.current.style.pointerEvents = op1 > 0.5 ? "auto" : "none";
 
-      // Overlap logic: Allow text to finish fading before switching
-      if (smoothP < 0.33) {
-        currentIndex = 0;
-        localProgress = smoothP / 0.33; 
-      } else if (smoothP < 0.66) {
-        currentIndex = 1;
-        localProgress = (smoothP - 0.33) / 0.33;
-      } else {
-        currentIndex = 2;
-        localProgress = (smoothP - 0.66) / 0.34;
-      }
+      slide2.current.style.opacity = Math.max(0, op2).toString();
+      slide2.current.style.pointerEvents = op2 > 0.5 ? "auto" : "none";
 
-      if (activeIndex !== currentIndex) {
-        setActiveIndex(currentIndex);
-      }
-
-      // 5. TEXT HIGHLIGHT (Char by Char)
-      const activeChars = textRefs.current[currentIndex];
-      if (activeChars) {
-        const visibleCharCount = Math.floor(localProgress * (activeChars.length + 10));
-
-        activeChars.forEach((span, i) => {
-          if (!span) return;
-          const isActive = i < visibleCharCount;
-          
-          // Use CSS transitions on the SPAN itself for extra smoothness
-          span.style.opacity = isActive ? "1" : "0.15";
-          span.style.color = isActive ? "#ffffff" : "rgba(240, 240, 255, 0.3)";
-          span.style.textShadow = isActive ? "0 0 15px rgba(255,255,255,0.3)" : "none";
-          span.style.transform = isActive ? "translateY(0)" : "translateY(2px)"; // Subtle lift
-        });
-      }
+      // CLAMP op3 to max 1. This ensures it STAYS visible while flower finishes.
+      slide3.current.style.opacity = Math.max(0, Math.min(1, op3)).toString();
+      slide3.current.style.pointerEvents = op3 > 0.5 ? "auto" : "none";
     }
   });
 
   return (
-    <section 
-      ref={outerRef} 
-      className="relative w-full h-[300vh] z-10"
-    >
-      <div 
-        ref={innerRef}
-        className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center overflow-hidden will-change-transform"
-      >
-        {/* Header */}
-        <div className="absolute top-20 left-10 z-20">
-          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded px-3 py-2.5 w-fit backdrop-blur-md transition-opacity duration-500">
-            <div className="w-2.5 h-2.5 bg-[#48cae4] rounded-sm shadow-[0_0_8px_#48cae4]" />
-            <span className="text-white text-xs tracking-wider uppercase font-medium opacity-90">
+    // 1. SCROLL TRACK (400vh) - Invisible, provides the time
+    <section className="relative z-10 w-full h-[400vh] pointer-events-none">
+      
+      {/* 2. STICKY VIEWPORT - The "One Screen" */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        
+        {/* FIXED SECTION TITLE (Top Left) */}
+        <div className="absolute top-10 left-10 z-20">
+          <div className="flex items-center gap-2 bg-white/10 rounded px-3 py-2.5 w-fit backdrop-blur-md border border-white/10">
+            <div className="w-2.5 h-2.5 bg-[#48cae4] rounded-sm shadow-[0_0_10px_#48cae4]" />
+            <span className="text-white text-xs tracking-wider uppercase font-medium">
               WHAT WE ARE BUILDING
             </span>
           </div>
         </div>
 
-        {/* PROGRESS BAR */}
-        <div className="absolute top-40 px-10 w-full z-20">
-          <div className="w-full h-[1px] bg-white/10 overflow-hidden">
-            <div 
-              ref={progressBarRef}
-              className="h-full bg-gradient-to-r from-[#48cae4] to-white shadow-[0_0_15px_#48cae4]"
-              style={{ width: "0%" }}
-            />
-          </div>
-        </div>
-
-        {/* CONTENT ROW */}
-        <div className="w-full max-w-[1440px] mx-auto px-10 flex items-center h-full pt-20">
+        {/* 3. SLIDES CONTAINER (Full Screen) */}
+        <div className="relative w-full h-full max-w-[1440px] mx-auto px-10">
           
-          {/* LEFT: Spacer */}
-          <div className="w-1/2 hidden md:block" />
+          {/* --- SLIDE 1 --- */}
+          <div ref={slide1} className="absolute inset-0 w-full h-full">
+            {/* Heading (Top Left - Below Title) */}
+            <div className="absolute top-32 left-0 md:left-10">
+               <NumberBadge num="01" total="03" />
+            </div>
+            {/* Text (Bottom Right - Fixed Position) */}
+            <div className="absolute bottom-20 right-0 md:right-10 max-w-lg pointer-events-auto">
+               <ContentText section={sections[0]} />
+            </div>
+          </div>
 
-          {/* RIGHT: Text Area */}
-          <div className="w-full md:w-1/2 relative h-[300px]">
-            {splitSections.map((section, sectionIndex) => (
-              <div 
-                key={sectionIndex}
-                // Updated Transition: Slower duration (1000ms) and custom ease for "floaty" feel
-                className={`absolute inset-0 flex flex-col gap-6 transition-all duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
-                  activeIndex === sectionIndex 
-                    ? "opacity-100 translate-y-0 scale-100 blur-none pointer-events-auto" 
-                    : "opacity-0 translate-y-8 scale-95 blur-md pointer-events-none"
-                }`}
-              >
-                {/* Number Badge */}
-                <div className="shrink-0">
-                  <div className="border border-white/20 bg-white/5 rounded-full px-6 py-4 w-fit backdrop-blur-md">
-                    <span className="text-white text-xs tracking-wider font-medium">
-                      {section.number}{" "}
-                      <span className="text-white/30">/ {section.total}</span>
-                    </span>
-                  </div>
-                </div>
+          {/* --- SLIDE 2 --- */}
+          <div ref={slide2} className="absolute inset-0 w-full h-full opacity-0">
+            <div className="absolute top-32 left-0 md:left-10">
+               <NumberBadge num="02" total="03" />
+            </div>
+            {/* SAME Position as Slide 1 */}
+            <div className="absolute bottom-20 right-0 md:right-10 max-w-lg pointer-events-auto">
+               <ContentText section={sections[1]} />
+            </div>
+          </div>
 
-                {/* Scrubbing Text */}
-                <div className="backdrop-blur-[0px]"> {/* Removed blur on container for sharper text */}
-                  <p className="text-3xl md:text-5xl leading-tight font-light tracking-wide">
-                    {section.chars.map((char, charIndex) => (
-                      <span
-                        key={charIndex}
-                        ref={(el) => {
-                           if (el) {
-                             if (!textRefs.current[sectionIndex]) textRefs.current[sectionIndex] = [];
-                             textRefs.current[sectionIndex][charIndex] = el;
-                           }
-                        }}
-                        // Added transition to the span itself for liquid-like flow
-                        className="inline-block transition-all duration-300 ease-out"
-                        style={{ 
-                          opacity: 0.15,
-                          willChange: "opacity, color, transform"
-                        }}
-                      >
-                        {char}
-                      </span>
-                    ))}
-                  </p>
-                </div>
-              </div>
-            ))}
+          {/* --- SLIDE 3 --- */}
+          <div ref={slide3} className="absolute inset-0 w-full h-full opacity-0">
+            <div className="absolute top-32 left-0 md:left-10">
+               <NumberBadge num="03" total="03" />
+            </div>
+            {/* SAME Position as Slide 1 */}
+            <div className="absolute bottom-20 right-0 md:right-10 max-w-lg pointer-events-auto">
+               <ContentText section={sections[2]} />
+            </div>
           </div>
 
         </div>
       </div>
     </section>
+  );
+}
+
+function NumberBadge({ num, total }: { num: string, total: string }) {
+  return (
+    <div className="border border-white/20 bg-white/5 rounded-full px-6 py-4 backdrop-blur-md w-fit">
+      <span className="text-white text-lg tracking-widest font-light">
+        {num} <span className="text-white/30 text-sm">/ {total}</span>
+      </span>
+    </div>
+  );
+}
+
+function ContentText({ section }: { section: typeof sections[0] }) {
+  return (
+    <div className="text-right">
+      <div className="inline-block bg-[#081421]/60 backdrop-blur-xl rounded-2xl p-8 border border-white/10 shadow-2xl">
+        <p className="text-2xl md:text-3xl lg:text-4xl leading-tight text-white font-light">
+          {section.text}
+        </p>
+        {section.highlight && (
+          <p className="text-[#48cae4] text-xl md:text-2xl mt-4 font-normal leading-tight">
+            {section.highlight}
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

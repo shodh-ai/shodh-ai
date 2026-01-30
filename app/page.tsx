@@ -12,16 +12,22 @@ import Navbar from "@/components/Navbar";
 import WhatWeBuilding from "@/components/WhatWeBuilding";
 import { GlassFlower } from "@/components/GlassFlower";
 
-// Extracting this prevents the "createRoot" hydration warning
 function HTMLContent() {
   return (
     <>
       <Navbar />
       <Hero />
       <WhatWeBuilding />
-      <HowItWorks />
-      <Impact />
-      <Footer />
+      
+      {/* 
+         ADDED: relative z-20 and background color.
+         This makes it act like a cover that slides over the flower.
+      */}
+      <div className="relative z-20 bg-[#f0f0ff]">
+        <HowItWorks />
+        <Impact />
+        <Footer />
+      </div>
     </>
   );
 }
@@ -42,8 +48,8 @@ export default function Home() {
         <Environment preset="city" />
 
         <Suspense fallback={null}>
-          {/* FIX: Increased pages from 6 to 8 to accommodate the tall 300vh section */}
-          <ScrollControls pages={8.15} damping={0.2}>
+          {/* Increased to 7 pages for the ultimate "Sticky" experience */}
+          <ScrollControls pages={7} damping={0.2}>
             
             {/* The 3D Scene */}
             <GlassFlower />
