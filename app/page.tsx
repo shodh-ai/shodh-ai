@@ -16,6 +16,7 @@ import { GlassFlower } from "@/components/GlassFlower";
 import Protocol from "@/components/Protocol";
 
 const TOTAL_PAGES_FALLBACK = 10;
+const HEIGHT_PX_BUFFER = 8;
 
 export default function Home() {
   const [pages, setPages] = useState(TOTAL_PAGES_FALLBACK);
@@ -27,10 +28,10 @@ export default function Home() {
       if (containerRef.current) {
         // 1. Get exact pixel height of your content
         const contentHeight = containerRef.current.getBoundingClientRect().height;
-        const viewportHeight = window.innerHeight;
+        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
         
         // 2. Convert to Three.js "pages" (floating point)
-        const exactPages = contentHeight / viewportHeight;
+        const exactPages = (contentHeight + HEIGHT_PX_BUFFER) / viewportHeight;
         
         // 3. Update state
         setPages(exactPages);
@@ -44,7 +45,17 @@ export default function Home() {
     // Initial check
     updateHeight();
 
-    return () => observer.disconnect();
+    // Also update when the viewport changes (important on mobile address bar show/hide)
+    window.addEventListener("resize", updateHeight);
+    window.visualViewport?.addEventListener("resize", updateHeight);
+    window.visualViewport?.addEventListener("scroll", updateHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateHeight);
+      window.visualViewport?.removeEventListener("resize", updateHeight);
+      window.visualViewport?.removeEventListener("scroll", updateHeight);
+    };
   }, []);
 
   return (

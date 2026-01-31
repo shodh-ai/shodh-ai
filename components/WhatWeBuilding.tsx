@@ -153,7 +153,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
         className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center overflow-hidden will-change-transform"
       >
         {/* Header */}
-        <div className="absolute top-20 left-10 z-20">
+        <div className="absolute top-16 md:top-20 left-6 md:left-10 z-20">
           <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded px-3 py-2.5 w-fit backdrop-blur-md">
             <div className="w-2.5 h-2.5 bg-[#48cae4] rounded-sm shadow-[0_0_8px_#48cae4]" />
             <span className="text-white text-xs tracking-wider uppercase font-medium opacity-90">
@@ -163,7 +163,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
         </div>
 
         {/* PROGRESS BAR */}
-        <div className="absolute top-40 px-10 w-full z-20">
+        <div className="absolute top-32 md:top-40 px-6 md:px-10 w-full z-20">
           <div className="w-full h-[1px] bg-white/10 overflow-hidden">
             <div 
               ref={progressBarRef}
@@ -174,7 +174,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
         </div>
 
         {/* CONTENT ROW */}
-        <div className="w-full max-w-[1440px] mx-auto px-10 flex h-full">
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 flex h-full">
           
           {/* --- LEFT COLUMN --- */}
           <div className="w-1/2 hidden md:block h-full relative -ml-16 pointer-events-none">
@@ -251,7 +251,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
           </div>
 
           {/* --- RIGHT COLUMN --- */}
-          <div className="w-full md:w-1/2 h-full relative translate-x-32 pointer-events-none">
+          <div className="w-full md:w-1/2 h-full relative translate-x-0 md:translate-x-32 pointer-events-none">
             {splitSections.map((section, index) => {
               const isEven = index % 2 === 0;
               const isActive = activeIndex === index;

@@ -18,15 +18,14 @@ export default function Hero() {
       <div className="relative z-10 flex min-h-screen w-full flex-col justify-center">
         
         {/* Row - Aligns Left and Right columns at the bottom */}
-        <div className="flex w-full items-end px-10">
+        <div className="flex w-full flex-col md:flex-row md:items-end px-6 md:px-10">
           
           {/* Left Column */}
-          <div className="flex w-1/2 flex-col pb-4">
-            <p className="text-white max-w-md mb-9 font-aeonik" style={{
+          <div className="flex w-full md:w-1/2 flex-col pb-4">
+            <p className="text-white max-w-md mb-9 font-aeonik text-base sm:text-lg" style={{
               fontFamily: 'Aeonik, sans-serif',
               fontWeight: '400',
               fontStyle: 'normal',
-              fontSize: '20px',
               lineHeight: '110%',
               letterSpacing: '0%',
               verticalAlign: 'bottom'
@@ -35,13 +34,11 @@ export default function Hero() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex gap-5">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full">
               <Link
                 href="#mission"
-                className="inline-flex items-center justify-center bg-[#f0f0ff] text-[#081421] text-base tracking-wide hover:bg-white transition-colors"
+                className="inline-flex items-center justify-center bg-[#f0f0ff] text-[#081421] text-sm sm:text-base tracking-wide hover:bg-white transition-colors h-11 px-5"
                 style={{
-                  width: '143px',
-                  height: '44px',
                   opacity: '1',
                   borderRadius: '8px',
                   borderWidth: '1px',
@@ -54,10 +51,8 @@ export default function Hero() {
               </Link>
               <Link
                 href="#how-it-works"
-                className="inline-flex items-center justify-center bg-white/10 text-white text-base tracking-wide"
+                className="inline-flex items-center justify-center bg-white/10 text-white text-sm sm:text-base tracking-wide h-11 px-5"
                 style={{
-                  width: '193px',
-                  height: '44px',
                   opacity: '1',
                   borderRadius: '8px',
                   borderWidth: '1px',
@@ -72,7 +67,7 @@ export default function Hero() {
           </div>
 
           {/* Right Column */}
-          <div className="flex w-1/2 flex-col items-end pointer-events-none pb-4">
+          <div className="flex w-full md:w-1/2 flex-col items-start md:items-end pointer-events-none pb-4 mt-10 md:mt-0">
             {/* Replaced Static H1 with Scroll-Animated Title */}
             <HeroTitle />
           </div>
