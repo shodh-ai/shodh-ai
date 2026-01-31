@@ -57,7 +57,7 @@ export default function GenesisTeaser() {
                 
                 <div className="flex items-center gap-4 overflow-hidden">
                   <div className="flex-1 h-1 bg-white/20 rounded-full" />
-                  <div className="flex gap-2 text-xs md:text-sm font-mono text-white/60 whitespace-nowrap">
+                  <div className="flex flex-wrap gap-2 text-xs md:text-sm font-mono text-white/60">
                     <span>Design</span>
                     <span>→</span>
                     <span>Lab</span>
@@ -90,7 +90,7 @@ export default function GenesisTeaser() {
                     </div>
                     
                     {/* Steps */}
-                    <div className="flex justify-between items-center text-sm md:text-base font-medium text-white">
+                    <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2 text-sm md:text-base font-medium text-white">
                       <span>Design</span>
                       <ArrowRight className="w-4 h-4 text-[#48cae4]" />
                       <span className="text-[#48cae4] drop-shadow-[0_0_8px_rgba(72,202,228,0.5)]">

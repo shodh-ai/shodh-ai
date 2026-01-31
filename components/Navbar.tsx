@@ -21,7 +21,8 @@ export default function Navbar() {
       {/* Navigation Links */}
       <div className="flex items-center gap-1 md:gap-4">
         <Link href="/demo" className="px-2 md:px-4 py-2 text-white text-sm md:text-base">
-          DEMO
+          <span className="hidden sm:inline">SEE IT IN ACTION</span>
+          <span className="sm:hidden">TRY MODEL</span>
         </Link>
         <Link href="#teams" className="px-2 md:px-4 py-2 text-white text-sm md:text-base">
           TEAMS

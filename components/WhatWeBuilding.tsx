@@ -138,9 +138,9 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
         if (!span) return;
         const isActive = i < visibleCharCount;
         
-        span.style.opacity = isActive ? "1" : "0.15";
-        span.style.color = isActive ? "#ffffff" : "rgba(240, 240, 255, 0.3)";
-        span.style.textShadow = isActive ? "0 0 15px rgba(255,255,255,0.3)" : "none";
+        span.style.opacity = isActive ? "1" : "0.55";
+        span.style.color = isActive ? "#ffffff" : "rgba(240, 240, 255, 0.72)";
+        span.style.textShadow = isActive ? "0 0 18px rgba(255,255,255,0.35)" : "none";
         span.style.transform = isActive ? "translateY(0)" : "translateY(4px)"; // Increased lift distance
       });
     }
@@ -153,17 +153,17 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
         className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center overflow-hidden will-change-transform"
       >
         {/* Header */}
-        <div className="absolute top-20 left-10 z-20">
+        <div className="absolute top-16 md:top-20 left-6 md:left-10 z-20">
           <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded px-3 py-2.5 w-fit backdrop-blur-md">
             <div className="w-2.5 h-2.5 bg-[#48cae4] rounded-sm shadow-[0_0_8px_#48cae4]" />
-            <span className="text-white text-xs tracking-wider uppercase font-medium opacity-90">
+            <span className="text-[#f0f0ff] text-xs tracking-wider uppercase font-medium drop-shadow-[0_0_14px_rgba(72,202,228,0.65)]">
               WHAT WE ARE BUILDING
             </span>
           </div>
         </div>
 
         {/* PROGRESS BAR */}
-        <div className="absolute top-40 px-10 w-full z-20">
+        <div className="absolute top-32 md:top-40 px-6 md:px-10 w-full z-20">
           <div className="w-full h-[1px] bg-white/10 overflow-hidden">
             <div 
               ref={progressBarRef}
@@ -174,7 +174,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
         </div>
 
         {/* CONTENT ROW */}
-        <div className="w-full max-w-[1440px] mx-auto px-10 flex h-full">
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 flex h-full">
           
           {/* --- LEFT COLUMN --- */}
           <div className="w-1/2 hidden md:block h-full relative -ml-16 pointer-events-none">
@@ -186,7 +186,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
                 <div key={index} className={`absolute w-[120%] transition-all duration-[1500ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}>
                   {isEven ? (
                     <div className="absolute -left-32 top-[17vh]">
-                      <h2 className="text-6xl lg:text-7xl font-light text-white leading-tight opacity-50">
+                      <h2 className="text-6xl lg:text-7xl font-light text-white leading-tight opacity-90 drop-shadow-[0_0_28px_rgba(255,255,255,0.12)]">
                         {section.title.split(" ")[0]} <br />
                         <span className="text-[#48cae4] font-normal opacity-100">
                           {section.title.split(" ").slice(1).join(" ")}
@@ -251,7 +251,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
           </div>
 
           {/* --- RIGHT COLUMN --- */}
-          <div className="w-full md:w-1/2 h-full relative translate-x-32 pointer-events-none">
+          <div className="w-full md:w-1/2 h-full relative translate-x-0 md:translate-x-32 pointer-events-none">
             {splitSections.map((section, index) => {
               const isEven = index % 2 === 0;
               const isActive = activeIndex === index;
@@ -311,7 +311,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
                     </div>
                   ) : (
                     <div className="absolute -right-16 top-[17vh] text-right w-[120%]">
-                      <h2 className="text-6xl lg:text-7xl font-light text-white leading-tight opacity-50">
+                      <h2 className="text-6xl lg:text-7xl font-light text-white leading-tight opacity-90 drop-shadow-[0_0_28px_rgba(255,255,255,0.12)]">
                         {section.title.split(" ")[0]} <br />
                         <span className="text-[#48cae4] font-normal opacity-100">
                           {section.title.split(" ").slice(1).join(" ")}
