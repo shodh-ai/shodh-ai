@@ -258,8 +258,16 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
 
               return (
                 <div key={index} className={`absolute w-full transition-all duration-[1500ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] ${isActive ? "opacity-100 translate-y-0 scale-100 blur-none" : "opacity-0 translate-y-12 scale-95 blur-md"}`}>
+                  <div className="md:hidden absolute left-0 top-[14vh] w-full">
+                    <h2 className="text-4xl sm:text-5xl font-light text-white leading-tight drop-shadow-[0_0_22px_rgba(255,255,255,0.10)]">
+                      {section.title.split(" ")[0]} <br />
+                      <span className="text-[#48cae4] font-normal opacity-100">
+                        {section.title.split(" ").slice(1).join(" ")}
+                      </span>
+                    </h2>
+                  </div>
                   {isEven ? (
-                    <div className="absolute left-0 top-[60vh] flex flex-col gap-6 w-full">
+                    <div className="absolute left-0 top-[54vh] md:top-[60vh] flex flex-col gap-6 w-full">
                       <div className="shrink-0">
                         <div className="border border-white/20 bg-white/5 rounded-full px-6 py-4 w-fit backdrop-blur-md">
                           <span className="text-white text-xs tracking-wider font-medium">
@@ -267,7 +275,7 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
                           </span>
                         </div>
                       </div>
-                      <p className="text-2xl md:text-4xl lg:text-5xl leading-tight font-light tracking-wide">
+                      <p className="text-xl sm:text-2xl md:text-4xl lg:text-5xl leading-tight font-light tracking-wide">
                         {(() => {
                           const chunks: React.ReactNode[] = [];
                           let wordSpans: React.ReactNode[] = [];
@@ -310,8 +318,8 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
                       </p>
                     </div>
                   ) : (
-                    <div className="absolute -right-16 top-[17vh] text-right w-[120%]">
-                      <h2 className="text-6xl lg:text-7xl font-light text-white leading-tight opacity-90 drop-shadow-[0_0_28px_rgba(255,255,255,0.12)]">
+                    <div className="hidden md:block absolute -right-16 top-[17vh] text-right w-[120%]">
+                      <h2 className="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-tight opacity-90 drop-shadow-[0_0_28px_rgba(255,255,255,0.12)]">
                         {section.title.split(" ")[0]} <br />
                         <span className="text-[#48cae4] font-normal opacity-100">
                           {section.title.split(" ").slice(1).join(" ")}
