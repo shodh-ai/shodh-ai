@@ -55,11 +55,16 @@ export default function Protocol() {
           </div>
 
           {/* Main Title */}
-          <h2 className="text-white text-4xl md:text-7xl font-medium uppercase tracking-tighter mb-10">
+          <h2 className="text-white text-4xl md:text-7xl font-medium uppercase tracking-tighter mb-6">
             The Skanda Protocol
           </h2>
 
-          {/* Centered Button with Enhanced Design */}
+          {/* NEW: Secondary Title */}
+          <p className="text-white/60 text-lg md:text-xl font-light max-w-3xl mx-auto leading-relaxed mb-10">
+            Skanda: a <span className="text-white">Foundation Model for Matter</span> — a generative LMM trained on physics-first simulations and deployed as an industrial OS.
+          </p>
+
+          {/* Button */}
           <div className="relative flex flex-col items-center mb-20">
             {/* Connecting Line (Top) */}
             <div className="w-px h-10 bg-gradient-to-b from-[#48cae4] to-transparent mb-4 opacity-50" />
@@ -68,7 +73,6 @@ export default function Protocol() {
                 href="/protocol" 
                 className="group relative flex items-center gap-3 px-8 py-4 bg-white/[0.03] hover:bg-white/[0.08] text-white rounded-full border border-white/10 transition-all duration-500 overflow-hidden"
             >
-                {/* Internal Glow Effect */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#48cae4]/20 via-transparent to-transparent transition-opacity duration-500" />
                 
                 <FileText className="w-4 h-4 text-[#48cae4]" />
@@ -78,12 +82,12 @@ export default function Protocol() {
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 text-white/50 group-hover:text-[#48cae4]" />
             </Link>
 
-            {/* Connecting Line (Bottom) - Guides the eye to the grid */}
+            {/* Connecting Line (Bottom) */}
             <div className="w-px h-16 bg-gradient-to-t from-[#48cae4] to-transparent mt-4 opacity-30" />
           </div>
         </div>
 
-        {/* The Grid Container */}
+        {/* Grid Container */}
         <div className="w-full border border-white/10 rounded-3xl bg-white/[0.01] backdrop-blur-sm overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
             {steps.map((step, index) => (
@@ -91,12 +95,10 @@ export default function Protocol() {
                 key={index}
                 className="group relative flex flex-col items-center text-center px-10 py-20 hover:bg-white/[0.02] transition-colors duration-500"
               >
-                {/* Number Indicator */}
                 <span className="absolute top-8 left-1/2 -translate-x-1/2 md:left-auto md:right-8 md:translate-x-0 text-white/5 text-5xl font-black group-hover:text-[#48cae4]/10 transition-colors">
                   {step.number}
                 </span>
 
-                {/* Icon Container with Glow */}
                 <div className="relative mb-12">
                   <div className="absolute inset-0 bg-[#48cae4] blur-[50px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 rounded-full" />
                   <div className="relative w-28 h-28 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center group-hover:border-[#48cae4]/40 group-hover:rotate-[360deg] transition-all duration-1000">
@@ -110,12 +112,10 @@ export default function Protocol() {
                   </div>
                 </div>
 
-                {/* Title */}
                 <h3 className="text-white text-2xl font-medium mb-6 group-hover:text-[#48cae4] transition-colors tracking-wide">
                   {step.title}
                 </h3>
 
-                {/* Description */}
                 <p className="text-white/50 text-sm leading-relaxed max-w-[280px] mx-auto">
                   {step.description.split("Mesoscale").map((part, i, arr) => (
                     <span key={i}>
