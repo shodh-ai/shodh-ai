@@ -221,9 +221,6 @@ export function ProtocolContent() {
 
             {section.id === 7 && (
               <section className="mb-32">
-                <h2 className="text-3xl md:text-4xl font-medium text-white mb-8">
-                  {section.title}
-                </h2>
                 {conclusionParagraphs.map((p: string, idx: number) => (
                   <p
                     key={idx}

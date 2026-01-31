@@ -12,11 +12,11 @@ export default function Footer() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 px-10 pt-20 pb-8">
+      <div className="relative z-10 px-6 md:px-10 pt-16 md:pt-20 pb-8">
         {/* Top Section */}
-        <div className="flex flex-wrap gap-16 lg:gap-32 mb-32">
+        <div className="flex flex-wrap gap-10 md:gap-16 lg:gap-32 mb-20 md:mb-32">
           {/* Left - CTA */}
-          <div className="flex-1 min-w-[300px]">
+          <div className="flex-1 w-full md:min-w-[300px]">
             <h2 className="text-white text-4xl md:text-5xl font-normal leading-tight mb-12">
               The Future of Material Science.
             </h2>
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
 
           {/* Navigate Links */}
-          <div className="border-l border-[#f0f0ff]/50 pl-6">
+          <div className="border-l-0 md:border-l border-[#f0f0ff]/50 pl-0 md:pl-6">
             <span className="text-[#f0f0ff]/50 text-base tracking-wide uppercase block mb-8">
               Navigate
             </span>
@@ -56,7 +56,7 @@ export default function Footer() {
           </div>
 
           {/* Connect Links */}
-          <div className="border-l border-[#f0f0ff]/50 pl-6">
+          <div className="border-l-0 md:border-l border-[#f0f0ff]/50 pl-0 md:pl-6">
             <span className="text-[#f0f0ff]/50 text-base tracking-wide uppercase block mb-8">
               Connect
             </span>
@@ -90,14 +90,14 @@ export default function Footer() {
 
         {/* Large Brand Text */}
         <div className="mb-8 overflow-hidden">
-          <h1 className="text-[#f0f0ff] text-[80px] sm:text-[120px] md:text-[180px] lg:text-[280px] xl:text-[341px] font-normal leading-none capitalize whitespace-nowrap">
+          <h1 className="text-[#f0f0ff] text-[clamp(56px,18vw,220px)] font-normal leading-none capitalize whitespace-normal md:whitespace-nowrap select-none">
             Shodh AI
           </h1>
         </div>
 
         {/* Copyright */}
         <div className="text-[#f0f0ff] text-xs tracking-wider uppercase">
-          © 2026 Shodh AI. All rights reserved
+          2026 Shodh AI. All rights reserved
         </div>
       </div>
     </footer>
