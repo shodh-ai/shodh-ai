@@ -22,22 +22,49 @@ export default function Hero() {
           
           {/* Left Column */}
           <div className="flex w-1/2 flex-col pb-4">
-            <p className="text-white text-xl leading-relaxed max-w-md mb-9">
-              Shodh AI is building India&apos;s sovereign engine to design &amp;
-              discover next generation of Energy Materials.
+            <p className="text-white max-w-md mb-9 font-aeonik" style={{
+              fontFamily: 'Aeonik, sans-serif',
+              fontWeight: '400',
+              fontStyle: 'normal',
+              fontSize: '20px',
+              lineHeight: '110%',
+              letterSpacing: '0%',
+              verticalAlign: 'bottom'
+            }}>
+              Mastery over the planet requires AI for material science.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex gap-5">
               <Link
                 href="#mission"
-                className="inline-flex items-center justify-center px-5 py-3 bg-[#f0f0ff] text-[#081421] text-base tracking-wide rounded-md hover:bg-white transition-colors"
+                className="inline-flex items-center justify-center bg-[#f0f0ff] text-[#081421] text-base tracking-wide hover:bg-white transition-colors"
+                style={{
+                  width: '143px',
+                  height: '44px',
+                  opacity: '1',
+                  borderRadius: '8px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: 'transparent',
+                  clipPath: 'polygon(0% 0%, 100% 0%, 100% 65%, 85% 100%, 0% 100%)',
+                }}
               >
                 OUR MISSION
               </Link>
               <Link
                 href="#how-it-works"
-                className="inline-flex items-center justify-center px-5 py-3 bg-transparent text-white text-base tracking-wide border border-white/50 rounded-md hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center bg-white/10 text-white text-base tracking-wide"
+                style={{
+                  width: '193px',
+                  height: '44px',
+                  opacity: '1',
+                  borderRadius: '8px',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                  clipPath: 'polygon(0% 0%, 100% 0%, 100% 65%, 85% 100%, 0% 100%)'
+                }}
               >
                 See How It Works
               </Link>
