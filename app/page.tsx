@@ -16,7 +16,7 @@ import { GlassFlower } from "@/components/GlassFlower";
 import Protocol from "@/components/Protocol";
 
 const TOTAL_PAGES_FALLBACK = 10;
-const HEIGHT_PX_BUFFER = 8;
+const HEIGHT_PX_BUFFER = 96;
 
 export default function Home() {
   const [pages, setPages] = useState(TOTAL_PAGES_FALLBACK);
