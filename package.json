@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "demo:build": "npm --prefix ../summit_demo run build",
-    "demo:sync": "rm -rf public/demo && mkdir -p public/demo && cp -R ../summit_demo/dist/. public/demo/",
+    "demo:build": "if [ -f ../summit_demo/package.json ]; then npm --prefix ../summit_demo run build; elif [ -f ./summit_demo/package.json ]; then npm --prefix ./summit_demo run build; else echo \"summit_demo not found; skipping demo:build\"; fi",
+    "demo:sync": "if [ -d ../summit_demo/dist ]; then rm -rf public/demo && mkdir -p public/demo && cp -R ../summit_demo/dist/. public/demo/; elif [ -d ./summit_demo/dist ]; then rm -rf public/demo && mkdir -p public/demo && cp -R ./summit_demo/dist/. public/demo/; else echo \"summit_demo dist not found; using existing public/demo\"; fi",
     "demo": "npm run demo:build && npm run demo:sync",
     "build": "next build",
     "start": "next start",
