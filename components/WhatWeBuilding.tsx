@@ -26,7 +26,11 @@ const sections = [
   },
 ];
 
-export default function WhatWeBuilding() {
+type WhatWeBuildingProps = {
+  totalPages?: number;
+};
+
+export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   
   const outerRef = useRef<HTMLDivElement>(null);
@@ -48,7 +52,7 @@ export default function WhatWeBuilding() {
 
     // PINNING MATH (Virtual Scroll)
     const viewportHeight = window.innerHeight;
-    const totalScrollHeight = 7.5 * viewportHeight; // (pages - 1)
+    const totalScrollHeight = (totalPages - 1) * viewportHeight; // (pages - 1)
     
     const currentScrollY = scroll.offset * totalScrollHeight;
     const startY = 1 * viewportHeight; 
@@ -67,7 +71,7 @@ export default function WhatWeBuilding() {
     innerRef.current.style.opacity = "1";
 
     // ANIMATION PROGRESS
-    const progress = scroll.range(1/8.5, 4.5/8.5);
+    const progress = scroll.range(1 / totalPages, 4.5 / totalPages);
     const animationCap = 0.85;
     const mappedProgress = Math.min(progress / animationCap, 1);
     

@@ -7,6 +7,8 @@ import Image from "next/image"; // Import Image component
 
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
+import GenesisTeaser from "@/components/GenesisTeaser";
+import NationalMandate from "@/components/NationalMandate";
 
 import Impact from "@/components/Impact";
 import Navbar from "@/components/Navbar";
@@ -14,15 +16,20 @@ import WhatWeBuilding from "@/components/WhatWeBuilding";
 import { GlassFlower } from "@/components/GlassFlower";
 import Protocol from "@/components/Protocol";
 
+const TOTAL_PAGES = 10.53;
+
 function HTMLContent() {
   return (
     <>
       <Navbar />
       <Hero />
-      <WhatWeBuilding />
+      <WhatWeBuilding totalPages={TOTAL_PAGES} />
+      
       <Protocol />
-
+<NationalMandate />
       <Impact />
+      <GenesisTeaser />
+      
       <Footer />
     </>
   );
@@ -60,8 +67,8 @@ export default function Home() {
         <Environment preset="city" />
 
         <Suspense fallback={null}>
-          {/* FIX: Increased pages from 8.15 to 9 to fit the larger 450vh section */}
-          <ScrollControls pages={8.59} damping={0.2}>
+          {/* FIX: Use shared TOTAL_PAGES so 3D scroll + WhatWeBuilding stay in sync */}
+          <ScrollControls pages={TOTAL_PAGES} damping={0.2}>
             <GlassFlower />
             
             <Scroll html style={{ width: "100%" }}>
