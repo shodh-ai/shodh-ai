@@ -48,7 +48,7 @@ export default function WhatWeBuilding() {
 
     // PINNING MATH (Virtual Scroll)
     const viewportHeight = window.innerHeight;
-    const totalScrollHeight = 8.65 * viewportHeight; // (pages - 1)
+    const totalScrollHeight = 7.5 * viewportHeight; // (pages - 1)
     
     const currentScrollY = scroll.offset * totalScrollHeight;
     const startY = 1 * viewportHeight; 
@@ -67,7 +67,7 @@ export default function WhatWeBuilding() {
     innerRef.current.style.opacity = "1";
 
     // ANIMATION PROGRESS
-    const progress = scroll.range(1/9.65, 4.5/9.65);
+    const progress = scroll.range(1/8.5, 4.5/8.5);
     const animationCap = 0.85;
     const mappedProgress = Math.min(progress / animationCap, 1);
     

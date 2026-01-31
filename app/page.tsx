@@ -7,11 +7,12 @@ import Image from "next/image"; // Import Image component
 
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
+
 import Impact from "@/components/Impact";
 import Navbar from "@/components/Navbar";
 import WhatWeBuilding from "@/components/WhatWeBuilding";
 import { GlassFlower } from "@/components/GlassFlower";
+import Protocol from "@/components/Protocol";
 
 function HTMLContent() {
   return (
@@ -19,7 +20,8 @@ function HTMLContent() {
       <Navbar />
       <Hero />
       <WhatWeBuilding />
-      <HowItWorks />
+      <Protocol />
+
       <Impact />
       <Footer />
     </>
@@ -59,7 +61,7 @@ export default function Home() {
 
         <Suspense fallback={null}>
           {/* FIX: Increased pages from 8.15 to 9 to fit the larger 450vh section */}
-          <ScrollControls pages={9.65} damping={0.2}>
+          <ScrollControls pages={8.59} damping={0.2}>
             <GlassFlower />
             
             <Scroll html style={{ width: "100%" }}>

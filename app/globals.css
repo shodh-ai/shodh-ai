@@ -17,13 +17,15 @@
   --font-sans: var(--font-aeonik);
 }
 
-/* Ensure html/body take full height for the canvas to fit */
+/* Ensure html/body take full height for the canvas to fit,
+   but allow normal scrolling on content-heavy pages like /protocol */
 html, body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Drei ScrollControls handles the overflow */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
