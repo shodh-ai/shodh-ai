@@ -16,7 +16,7 @@ import Image from "next/image";
 export default function SkandaPage() {
   return (
     <main className="min-h-screen w-full relative bg-[#081421] text-[#f0f0ff] font-sans selection:bg-[#48cae4] selection:text-[#081421]">
-      {/* Background Image - Reusing the abstract tech background */}
+      {/* Background Image */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <Image 
           src="/Frame 626503.png" 
@@ -46,23 +46,21 @@ export default function SkandaPage() {
             </div>
             
             <h1 className="text-4xl md:text-7xl font-medium uppercase tracking-tight mb-8 text-white leading-[1.1]">
-              The Skanda <br className="hidden md:block"/> Protocol
+              The Skanda Protocol
             </h1>
             <p className="text-xl md:text-2xl text-white/60 font-light max-w-3xl mx-auto">
               The Universal "Matter Compiler" for Mesoscale Manufacturing.
             </p>
           </header>
 
-          {/* --- SECTION 1: THE THESIS (The Missing Middle) --- */}
+          {/* --- SECTION 1: THE THESIS --- */}
           <section className="mb-32">
             <div className="border border-white/10 rounded-2xl bg-white/[0.02] p-8 md:p-12 backdrop-blur-sm">
               <h2 className="text-2xl md:text-4xl font-medium text-white mb-10 text-center">
                 1. The Thesis: Solving the "Missing Middle"
               </h2>
 
-              {/* Visual Scale Diagram */}
               <div className="flex flex-col md:flex-row items-stretch justify-center gap-4 mb-10">
-                {/* Atomic */}
                 <div className="flex-1 p-6 border border-white/10 rounded-xl bg-white/5 opacity-50 grayscale">
                     <span className="text-xs font-mono text-white/50 block mb-2">0.1 nm (Angstroms)</span>
                     <h3 className="text-lg font-bold text-white mb-2">Atomic AI</h3>
@@ -70,7 +68,6 @@ export default function SkandaPage() {
                     <p className="text-xs text-white/40">Good at finding molecules.</p>
                 </div>
 
-                {/* Mesoscale (Highlighted) */}
                 <div className="flex-1 p-6 border-2 border-[#48cae4] rounded-xl bg-[#48cae4]/5 relative overflow-hidden transform md:-translate-y-2 shadow-[0_0_30px_rgba(72,202,228,0.1)]">
                     <div className="absolute top-0 right-0 px-2 py-1 bg-[#48cae4] text-[#081421] text-[10px] font-bold uppercase tracking-wider">Target Zone</div>
                     <span className="text-xs font-mono text-[#48cae4] block mb-2">10nm – 100μm</span>
@@ -79,7 +76,6 @@ export default function SkandaPage() {
                     <p className="text-xs text-white/80">Pores, Grains, Defects. The structural regime where manufacturing actually fails.</p>
                 </div>
 
-                {/* System */}
                 <div className="flex-1 p-6 border border-white/10 rounded-xl bg-white/5 opacity-50 grayscale">
                     <span className="text-xs font-mono text-white/50 block mb-2">Meters (Macro)</span>
                     <h3 className="text-lg font-bold text-white mb-2">System AI</h3>
@@ -96,7 +92,7 @@ export default function SkandaPage() {
             </div>
           </section>
 
-          {/* --- SECTION 2: THE ENGINE (3D DiT) --- */}
+          {/* --- SECTION 2: THE ENGINE --- */}
           <section className="mb-32">
             <div className="flex flex-col md:flex-row gap-12 items-center">
               <div className="md:w-1/2">
@@ -214,7 +210,6 @@ export default function SkandaPage() {
           <section className="mb-32">
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div className="order-2 lg:order-1 relative">
-                   {/* Abstract Factory Visual */}
                    <div className="absolute inset-0 bg-[#48cae4]/20 blur-[100px] rounded-full opacity-20" />
                    <div className="relative border border-white/10 bg-[#0a1628] rounded-xl overflow-hidden p-8">
                       <div className="space-y-6">
@@ -329,7 +324,6 @@ export default function SkandaPage() {
                   </div>
                </div>
 
-               {/* Metric Card */}
                <div className="col-span-1 bg-white/5 border border-white/10 p-8 rounded-xl flex flex-col justify-center items-center text-center">
                   <Network className="w-12 h-12 text-[#48cae4] mb-4 opacity-80" />
                   <span className="text-white/40 text-xs uppercase tracking-widest mb-2">The New Metric</span>
@@ -338,6 +332,32 @@ export default function SkandaPage() {
                      "In the age of Software-Defined Materials, Yield is a function of Edge Compute."
                   </p>
                </div>
+            </div>
+          </section>
+
+          {/* --- NEW SECTION: GAMMA EMBED (Full Width) --- */}
+          <section className="mb-32">
+            <div className="w-full bg-gradient-to-b from-[#48cae4]/20 to-transparent rounded-2xl p-1">
+              <div className="bg-[#081421] rounded-2xl overflow-hidden border border-white/10 relative group">
+                {/* Header for the Embed */}
+                <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[#48cae4] rounded-full animate-pulse" />
+                    <span className="text-white font-medium text-sm tracking-wide">SkandaX: Interactive Demo</span>
+                  </div>
+                  <span className="text-white/30 text-xs font-mono">LIVE PREVIEW</span>
+                </div>
+                
+                {/* The Iframe (Full Width) */}
+                <div className="w-full h-[600px] md:h-[800px] bg-black/50 relative">
+                    <iframe 
+                      src="https://gamma.app/embed/k6ywudw9ptsjmly" 
+                      className="absolute inset-0 w-full h-full border-0"
+                      allowFullScreen 
+                      title="SkandaX: Applied on Battery"
+                    />
+                </div>
+              </div>
             </div>
           </section>
 
