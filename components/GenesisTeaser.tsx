@@ -32,7 +32,7 @@ export default function GenesisTeaser() {
             </p>
 
             <Link
-              href="/protocol"
+              href="/genesis"
               className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-[#081421] text-xs font-bold tracking-widest uppercase rounded hover:bg-[#48cae4] transition-all duration-300"
             >
               Read The Manifesto
