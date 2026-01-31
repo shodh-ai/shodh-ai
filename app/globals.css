@@ -33,3 +33,29 @@ body {
   color: var(--foreground);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
+
+/* Ensure Drei Scroll HTML container can grow with content */
+canvas + div > div {
+  height: auto !important;
+  min-height: 100vh;
+}
+
+
+
+/* Ensure the Three.js HTML container doesn't collapse margins */
+[data-overlay] > div {
+  display: block !important;
+  height: auto !important;
+}
+
+/* Ensure images have defined ratios so they don't pop in after measurement */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Fix for the Scroll component transform */
+.react-three-fiber-scroll-html {
+  transform-origin: top left;
+}

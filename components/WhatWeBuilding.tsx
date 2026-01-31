@@ -15,7 +15,7 @@ const sections = [
   {
     number: "02",
     total: "03",
-    title: "BEYOND SCIENCE FICTION",
+    title: "PHYSICS GENERATED ",
     text: "Introducing SkandaX. We don't guess chemistry; We choose the result.",
   },
   {
@@ -202,18 +202,46 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
                           </span>
                         </div>
                       </div>
-                      <p className="text-3xl md:text-5xl leading-tight font-light tracking-wide max-w-xl">
-                        {section.chars.map((char, charIndex) => (
-                          <span
-                            key={charIndex}
-                            ref={(el) => { if (el) textRefs.current[index][charIndex] = el; }}
-                            // CHANGED: duration-700 + ease-out (Soft fade in)
-                            className="inline-block transition-all duration-700 ease-out"
-                            style={{ opacity: 0.15, willChange: "opacity, color, transform" }}
-                          >
-                            {char}
-                          </span>
-                        ))}
+                      <p className="text-2xl md:text-4xl lg:text-5xl leading-tight font-light tracking-wide max-w-xl">
+                        {(() => {
+                          const chunks: React.ReactNode[] = [];
+                          let wordSpans: React.ReactNode[] = [];
+
+                          section.chars.forEach((char, charIndex) => {
+                            if (char === " ") {
+                              if (wordSpans.length) {
+                                chunks.push(
+                                  <span key={`w-${charIndex}`} className="inline-block">
+                                    {wordSpans}
+                                  </span>
+                                );
+                                wordSpans = [];
+                              }
+                              chunks.push(" ");
+                            } else {
+                              wordSpans.push(
+                                <span
+                                  key={charIndex}
+                                  ref={(el) => { if (el) textRefs.current[index][charIndex] = el; }}
+                                  className="inline-block transition-all duration-700 ease-out"
+                                  style={{ opacity: 0.15, willChange: "opacity, color, transform" }}
+                                >
+                                  {char}
+                                </span>
+                              );
+                            }
+                          });
+
+                          if (wordSpans.length) {
+                            chunks.push(
+                              <span key="w-last" className="inline-block">
+                                {wordSpans}
+                              </span>
+                            );
+                          }
+
+                          return chunks;
+                        })()}
                       </p>
                     </div>
                   )}
@@ -239,17 +267,46 @@ export default function WhatWeBuilding({ totalPages = 8.59 }: WhatWeBuildingProp
                           </span>
                         </div>
                       </div>
-                      <p className="text-3xl md:text-5xl leading-tight font-light tracking-wide">
-                        {section.chars.map((char, charIndex) => (
-                          <span
-                            key={charIndex}
-                            ref={(el) => { if (el) textRefs.current[index][charIndex] = el; }}
-                            className="inline-block transition-all duration-700 ease-out"
-                            style={{ opacity: 0.15, willChange: "opacity, color, transform" }}
-                          >
-                            {char}
-                          </span>
-                        ))}
+                      <p className="text-2xl md:text-4xl lg:text-5xl leading-tight font-light tracking-wide">
+                        {(() => {
+                          const chunks: React.ReactNode[] = [];
+                          let wordSpans: React.ReactNode[] = [];
+
+                          section.chars.forEach((char, charIndex) => {
+                            if (char === " ") {
+                              if (wordSpans.length) {
+                                chunks.push(
+                                  <span key={`w-${charIndex}`} className="inline-block">
+                                    {wordSpans}
+                                  </span>
+                                );
+                                wordSpans = [];
+                              }
+                              chunks.push(" ");
+                            } else {
+                              wordSpans.push(
+                                <span
+                                  key={charIndex}
+                                  ref={(el) => { if (el) textRefs.current[index][charIndex] = el; }}
+                                  className="inline-block transition-all duration-700 ease-out"
+                                  style={{ opacity: 0.15, willChange: "opacity, color, transform" }}
+                                >
+                                  {char}
+                                </span>
+                              );
+                            }
+                          });
+
+                          if (wordSpans.length) {
+                            chunks.push(
+                              <span key="w-last" className="inline-block">
+                                {wordSpans}
+                              </span>
+                            );
+                          }
+
+                          return chunks;
+                        })()}
                       </p>
                     </div>
                   ) : (

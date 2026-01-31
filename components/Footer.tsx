@@ -90,14 +90,14 @@ export default function Footer() {
 
         {/* Large Brand Text */}
         <div className="mb-8 overflow-hidden">
-          <h1 className="text-[#f0f0ff] text-[80px] sm:text-[120px] md:text-[180px] lg:text-[280px] xl:text-[341px] font-normal leading-none capitalize whitespace-nowrap">
+          <h1 className="text-[#f0f0ff] text-[20vw] font-normal leading-none capitalize whitespace-nowrap select-none">
             Shodh AI
           </h1>
         </div>
 
         {/* Copyright */}
         <div className="text-[#f0f0ff] text-xs tracking-wider uppercase">
-          © 2026 Shodh AI. All rights reserved
+          2026 Shodh AI. All rights reserved
         </div>
       </div>
     </footer>

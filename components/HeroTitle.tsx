@@ -71,7 +71,7 @@ export default function HeroTitle() {
               return (
                 <span 
                   key={`${lineIndex}-${charIndex}`} 
-                  className="inline-block whitespace-pre text-6xl md:text-7xl lg:text-8xl xl:text-[124px]"
+                  className="inline-block whitespace-pre text-5xl md:text-7xl lg:text-8xl xl:text-[min(8vw,124px)]"
                 >
                   &nbsp;
                 </span>
@@ -88,11 +88,12 @@ export default function HeroTitle() {
                 key={`${lineIndex}-${charIndex}`}
                 ref={(el) => { spansRef.current[currentRefIndex] = el; }}
                 data-highlight={isHighlightSection} // Store this for the useFrame logic
-                className="inline-block transition-all duration-75 ease-out text-6xl md:text-7xl lg:text-8xl xl:text-[124px]"
+                className="inline-block transition-all duration-75 ease-out text-5xl md:text-7xl lg:text-8xl xl:text-[min(8vw,124px)]"
                 style={{ 
                   opacity: 0.15, // Ensures it starts fully dimmed
                   color: "#f0f0ff",
-                  willChange: "opacity, color"
+                  willChange: "opacity, color",
+                  lineHeight: "0.9",
                 }} 
               >
                 {char}
