@@ -1,8 +1,15 @@
 import "./globals.css";
 
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 
 import type { Metadata } from "next";
+
+const aeonik = Inter({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-aeonik",
+  display: "swap",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${aeonik.variable} antialiased`}
       >
         {children}
       </body>
