@@ -21,6 +21,12 @@ export default function Navbar() {
       {/* Navigation Links */}
       <div className="absolute right-10 top-[34px] flex items-center">
         <Link
+          href="/demo"
+          className="px-4 py-4 text-white text-base tracking-wide hover:opacity-80 transition-opacity"
+        >
+          DEMO
+        </Link>
+        <Link
           href="#teams"
           className="px-4 py-4 text-white text-base tracking-wide hover:opacity-80 transition-opacity"
         >

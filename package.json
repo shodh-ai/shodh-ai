@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "demo:build": "npm --prefix ../summit_demo run build",
+    "demo:sync": "rm -rf public/demo && mkdir -p public/demo && cp -R ../summit_demo/dist/. public/demo/",
+    "demo": "npm run demo:build && npm run demo:sync",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
